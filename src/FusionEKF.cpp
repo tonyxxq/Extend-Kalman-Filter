@@ -8,9 +8,6 @@ using Eigen::MatrixXd;
 using Eigen::VectorXd;
 using std::vector;
 
-/*
- * Constructor.
- */
 FusionEKF::FusionEKF() {
   is_initialized_ = false;
 
@@ -34,7 +31,6 @@ FusionEKF::FusionEKF() {
               0, 0.0009, 0,
               0, 0, 0.09;
 
-  
   // 初始化激光雷达的转换矩阵
   H_laser_ << 1, 0, 0, 0,
               0, 1, 0, 0;
@@ -58,14 +54,11 @@ FusionEKF::FusionEKF() {
   
   // 初始化Q矩阵
   Q_ <<  0, 0, 0, 0, 
-		 0, 0, 0, 0,
-		 0, 0, 0, 0,
-		 0, 0, 0, 0;
+		     0, 0, 0, 0,
+		     0, 0, 0, 0,
+		     0, 0, 0, 0;
 }
 
-/**
-* Destructor.
-*/
 FusionEKF::~FusionEKF() {}
 
 void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
@@ -112,9 +105,9 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   // 修改预测误差协方差
   ekf_.Q_ = MatrixXd(4, 4);
   ekf_.Q_ << dt_4 / 4 * noise_ax, 0, dt_3 / 2 * noise_ax, 0, 
-		 0, dt_4 / 4 * noise_ay, 0, dt_3 / 2 * noise_ay, 
-		 dt_3 / 2 * noise_ax, 0, dt_2 * noise_ax, 0, 
-		 0, dt_3 / 2 * noise_ay, 0, dt_2 * noise_ay;
+             0, dt_4 / 4 * noise_ay, 0, dt_3 / 2 * noise_ay,
+             dt_3 / 2 * noise_ax, 0, dt_2 * noise_ax, 0,
+             0, dt_3 / 2 * noise_ay, 0, dt_2 * noise_ay;
   ekf_.Predict();
   
   
@@ -122,8 +115,10 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
    *  更新，使用测量数据更新状态和P矩阵
    ****************************************************************************/
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
+    ekf_.R_ = R_radar_;
     ekf_.UpdateEKF(measurement_pack.raw_measurements_);
   } else {
+    ekf_.R_ = R_laser_;
     ekf_.Update(measurement_pack.raw_measurements_);
   }
   cout << "x_ = " << ekf_.x_ << endl;
