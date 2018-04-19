@@ -1,8 +1,19 @@
-#include <uWS/uWS.h>
+#include <sys/_types/_size_t.h>
+#include <uWS/HTTPSocket.h>
+#include <uWS/Hub.h>
+#include <uWS/WebSocket.h>
+#include <uWS/WebSocketProtocol.h>
+#include <functional>
 #include <iostream>
-#include "json.hpp"
-#include <math.h>
+#include <string>
+#include <vector>
+
+#include "Eigen/Core"
+#include "Eigen/src/Core/Matrix.h"
 #include "FusionEKF.h"
+#include "json.hpp"
+#include "kalman_filter.h"
+#include "measurement_package.h"
 #include "tools.h"
 
 using namespace std;
@@ -124,7 +135,6 @@ int main() {
               estimations.push_back(estimate);
 
               VectorXd RMSE = tools.CalculateRMSE(estimations, ground_truth);
-
               json msgJson;
               msgJson["estimate_x"] = p_x;
               msgJson["estimate_y"] = p_y;
@@ -169,7 +179,6 @@ int main() {
         ws.close();
         std::cout << "Disconnected" << std::endl;
       });
-
   int port = 4567;
   if (h.listen(port)) {
     std::cout << "Listening to port " << port << std::endl;

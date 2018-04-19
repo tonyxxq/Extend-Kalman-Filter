@@ -150,7 +150,7 @@ CMAKE_OSX_DEPLOYMENT_TARGET:STRING=
 CMAKE_OSX_SYSROOT:STRING=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=Extended_KF
+CMAKE_PROJECT_NAME:STATIC=ExtendedKF
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/Library/Developer/CommandLineTools/usr/bin/ranlib
@@ -212,10 +212,22 @@ CMAKE_STRIP:FILEPATH=/Library/Developer/CommandLineTools/usr/bin/strip
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //Value Computed by CMake
+ExtendedKF_BINARY_DIR:STATIC=/Users/xiaoqiangxie/Downloads/Extend-Kalman-Filter-P6/build
+
+//Value Computed by CMake
+ExtendedKF_SOURCE_DIR:STATIC=/Users/xiaoqiangxie/Downloads/Extend-Kalman-Filter-P6/src
+
+//Value Computed by CMake
 Extended_KF_BINARY_DIR:STATIC=/Users/xiaoqiangxie/Downloads/Extend-Kalman-Filter-P6/build
 
 //Value Computed by CMake
 Extended_KF_SOURCE_DIR:STATIC=/Users/xiaoqiangxie/Downloads/Extend-Kalman-Filter-P6/src
+
+//Value Computed by CMake
+Extended_Kalman_Filter_BINARY_DIR:STATIC=/Users/xiaoqiangxie/Downloads/Extend-Kalman-Filter-P6/build
+
+//Value Computed by CMake
+Extended_Kalman_Filter_SOURCE_DIR:STATIC=/Users/xiaoqiangxie/Downloads/Extend-Kalman-Filter-P6/src
 
 //Path to a program.
 ProcessorCount_cmd_sysctl:FILEPATH=/usr/sbin/sysctl

@@ -414,6 +414,7 @@ CMakeFiles/ExtendedKF.dir/kalman_filter.cpp.o
  /Users/xiaoqiangxie/Downloads/Extend-Kalman-Filter-P6/src/Eigen/src/plugins/MatrixCwiseUnaryOps.h
  /Users/xiaoqiangxie/Downloads/Extend-Kalman-Filter-P6/src/kalman_filter.cpp
  /Users/xiaoqiangxie/Downloads/Extend-Kalman-Filter-P6/src/kalman_filter.h
+ /Users/xiaoqiangxie/Downloads/Extend-Kalman-Filter-P6/src/tools.h
 CMakeFiles/ExtendedKF.dir/main.cpp.o
  /Users/xiaoqiangxie/Downloads/Extend-Kalman-Filter-P6/src/Eigen/Cholesky
  /Users/xiaoqiangxie/Downloads/Extend-Kalman-Filter-P6/src/Eigen/Core
@@ -634,7 +635,6 @@ CMakeFiles/ExtendedKF.dir/main.cpp.o
  /usr/local/include/uWS/WebSocket.h
  /usr/local/include/uWS/WebSocketProtocol.h
  /usr/local/include/uWS/uUV.h
- /usr/local/include/uWS/uWS.h
  /usr/local/include/uv-darwin.h
  /usr/local/include/uv-errno.h
  /usr/local/include/uv-threadpool.h

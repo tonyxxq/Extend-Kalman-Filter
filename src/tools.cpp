@@ -5,16 +5,17 @@ using Eigen::VectorXd;
 using Eigen::MatrixXd;
 using std::vector;
 
-Tools::Tools() {}
+Tools::Tools() {
+}
 
-Tools::~Tools() {}
+Tools::~Tools() {
+}
 
 /**
-* 计算RMS，测试预测值和真实值的误差
-*/
+ * 计算RMS，测试预测值和真实值的误差
+ */
 VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
-                              const vector<VectorXd> &ground_truth) {
-  
+                       const vector<VectorXd> &ground_truth) {
   VectorXd rmse(4);
   rmse << 0, 0, 0, 0;
 
@@ -47,10 +48,10 @@ VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
 }
 
 /**
-* 计算雅各比矩阵
-*/
+ * 计算雅各比矩阵
+ */
 MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
-  
+
   MatrixXd Hj(3, 4);
   //recover state parameters
   float px = x_state(0);
@@ -70,9 +71,9 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
   }
 
   //compute the Jacobian matrix
-  Hj << (px/c2), (py/c2), 0, 0,
-      -(py/c1), (px/c1), 0, 0,
-      py*(vx*py - vy*px)/c3, px*(px*vy - py*vx)/c3, px/c2, py/c2;
+  Hj << (px / c2), (py / c2), 0, 0, -(py / c1), (px / c1), 0, 0, py
+      * (vx * py - vy * px) / c3, px * (px * vy - py * vx) / c3, px / c2, py
+      / c2;
 
   return Hj;
 }

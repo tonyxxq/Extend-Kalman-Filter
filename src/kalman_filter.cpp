@@ -4,9 +4,6 @@
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
-// Please note that the Eigen library does not initialize 
-// VectorXd or MatrixXd objects with zeros upon creation.
-
 KalmanFilter::KalmanFilter() {}
 
 KalmanFilter::~KalmanFilter() {}
@@ -32,13 +29,11 @@ void KalmanFilter::Predict() {
 *计算卡尔曼滤波
 **/
 void KalmanFilter::Update(const VectorXd &z) {
-  
   // 使用转换矩阵计算K值，K值可以判断预测值和测量值在最终结果的比例
   MatrixXd Ht = H_.transpose();
   MatrixXd S = H_ * P_ * Ht + R_;
   MatrixXd Si = S.inverse();
   MatrixXd K = P_ * Ht* Si;
-  
   // 更新状态和协方差矩阵
   VectorXd z_pred = H_ * x_;
   VectorXd y = z - z_pred;
@@ -52,23 +47,22 @@ void KalmanFilter::Update(const VectorXd &z) {
 *计算扩展卡尔曼滤波
 **/
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
-  
   // 使用雅各比矩阵计算K值，K值可以判断预测值和测量值在最终结果的比例
-  MatrixXd Hj = CalculateJacobian(x_);
+  Tools tools;
+  MatrixXd Hj = tools.CalculateJacobian(x_);
   MatrixXd Hjt = Hj.transpose();
   MatrixXd S = Hj * P_ * Hjt + R_;
   MatrixXd Si = S.inverse();
   MatrixXd K = P_ * Hjt * Si;
-  
   // 把笛卡尔坐标转换成极坐标，转换成和测量值相同的格式
   VectorXd z_pred = VectorXd(3);
   z_pred[0] = sqrt(x_[0] * x_[0] + x_[1] * x_[1]);
   z_pred[1] = atan2(x_[1], x_[0]);
-  if (z_pred[0]!=0)
-	z_pred[2] = (x_[0] * x_[2] + x_[1] * x_[3]) / z_pred[0];
-  else
-	z_pred[2] = 0;
-
+  if (z_pred[0] != 0) {
+    z_pred[2] = (x_[0] * x_[2] + x_[1] * x_[3]) / z_pred[0];
+  } else {
+    z_pred[2] = 0;
+  }
   // 更新状态和协方差矩阵
   VectorXd y = z - z_pred;
   x_ = x_ + K * y;
