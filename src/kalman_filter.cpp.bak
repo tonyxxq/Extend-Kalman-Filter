@@ -60,7 +60,7 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   MatrixXd Si = S.inverse();
   MatrixXd K = P_ * Hjt * Si;
   
-  // 把笛卡尔坐标转换成极坐标，转换成和测量值相同的格式
+  // 把笛卡尔坐标转换成极坐标
   VectorXd z_pred = VectorXd(3);
   z_pred[0] = sqrt(x_[0] * x_[0] + x_[1] * x_[1]);
   z_pred[1] = atan2(x_[1], x_[0]);

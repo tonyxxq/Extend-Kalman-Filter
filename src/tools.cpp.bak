@@ -10,7 +10,7 @@ Tools::Tools() {}
 Tools::~Tools() {}
 
 /**
-* 计算RMS，测试预测值和真实值的误差
+* 计算RMS，测试预测值和真实值的
 */
 VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
                               const vector<VectorXd> &ground_truth) {
