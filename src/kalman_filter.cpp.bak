@@ -68,7 +68,7 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   }
   // 更新状态和协方差矩阵
   VectorXd y = z - z_pred;
-  // 注意：这个地方需要把角度范围缩放到-PI到PI之间
+  // 注意：这个地方需要把角度范围缩放到-pi到pi之间
   while (y[1] > M_PI){
     y[1] -= 2 * M_PI;
   }

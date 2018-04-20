@@ -7,9 +7,9 @@
   本项目在mac上使用eclipse开发。
 
 
-  输入: 模拟器产生的数据，包括激光雷达和雷达数据。
+    输入: 模拟器产生的数据，包括激光雷达和雷达数据。
 
-  输出: c++代码输出数据，该数据传输到模拟器。
+    输出: c++代码输出数据，该数据传输到模拟器。
 
 - 编译环境要求
 
@@ -29,6 +29,17 @@
 
 - 部分代码
 
+  > 执行过程
+  >
+  > 1. 初始化数据
+  >    - 激光雷达直接使用第一次的测量数据更新就可以了。
+  >    - 毫米波雷达需要把第一次的测量数据从极坐标转换成笛卡尔坐标的数据，这样激光雷达和毫米波雷达的数据格式一致，使用同一个预测函数。
+  > 2. 预测，
+  >    - 激光雷达和毫米波雷达使用同一个预测函数，预测的时候一共有两个变量值需要更新到F合Q矩阵，时间段和加速度。
+  > 3. 更新
+  >    - 激光雷达使用普通的卡尔曼滤波更新过程
+  >    - 因为卡尔曼滤波只能满足高斯分布，但是非线性函数执行后，结果就不是线性的了。毫米波雷达的测量值不满足线性条件，需要使用扩展卡尔曼滤波，把测量函数转换为近似的线性函数，再处理。
+
   - FusionEKF.cpp
 
     ```c++
@@ -42,9 +53,6 @@
     using Eigen::VectorXd;
     using std::vector;
 
-    /*
-     * Constructor.
-     */
     FusionEKF::FusionEKF() {
       is_initialized_ = false;
 
@@ -68,7 +76,6 @@
                   0, 0.0009, 0,
                   0, 0, 0.09;
 
-      
       // 初始化激光雷达的转换矩阵
       H_laser_ << 1, 0, 0, 0,
                   0, 1, 0, 0;
@@ -76,7 +83,7 @@
       // 初始化雷达的雅各比矩阵
       Hj_ << 1, 0, 0, 0,
              0, 1, 0, 0,
-    		     0, 0, 1, 0;
+    		0, 0, 1, 0;
 
       // 初始化P矩阵
       P_ << 1, 0, 0, 0,
@@ -92,14 +99,11 @@
       
       // 初始化Q矩阵
       Q_ <<  0, 0, 0, 0, 
-    		 0, 0, 0, 0,
-    		 0, 0, 0, 0,
-    		 0, 0, 0, 0;
+    		0, 0, 0, 0,
+    		0, 0, 0, 0,
+    		0, 0, 0, 0;
     }
 
-    /**
-    * Destructor.
-    */
     FusionEKF::~FusionEKF() {}
 
     void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
@@ -146,9 +150,9 @@
       // 修改预测误差协方差
       ekf_.Q_ = MatrixXd(4, 4);
       ekf_.Q_ << dt_4 / 4 * noise_ax, 0, dt_3 / 2 * noise_ax, 0, 
-    		 0, dt_4 / 4 * noise_ay, 0, dt_3 / 2 * noise_ay, 
-    		 dt_3 / 2 * noise_ax, 0, dt_2 * noise_ax, 0, 
-    		 0, dt_3 / 2 * noise_ay, 0, dt_2 * noise_ay;
+                 0, dt_4 / 4 * noise_ay, 0, dt_3 / 2 * noise_ay,
+                 dt_3 / 2 * noise_ax, 0, dt_2 * noise_ax, 0,
+                 0, dt_3 / 2 * noise_ay, 0, dt_2 * noise_ay;
       ekf_.Predict();
       
       
@@ -156,8 +160,10 @@
        *  更新，使用测量数据更新状态和P矩阵
        ****************************************************************************/
       if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
+        ekf_.R_ = R_radar_;
         ekf_.UpdateEKF(measurement_pack.raw_measurements_);
       } else {
+        ekf_.R_ = R_laser_;
         ekf_.Update(measurement_pack.raw_measurements_);
       }
       cout << "x_ = " << ekf_.x_ << endl;
@@ -325,10 +331,8 @@
 
       return Hj;
     }
-
     ```
 
     ​
-
 
 
